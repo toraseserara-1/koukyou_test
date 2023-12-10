@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>論理回路クイズ</title>
+    <title>二学期公共問題サイト</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,9 +32,6 @@
     </style>
 </head>
 <body>
-
-    <h1>論理回路クイズ</h1>
-
     <div id="questionsContainer"></div>
 
     <div id="result"></div>
@@ -42,11 +39,16 @@
     <script>
         // 質問と回答のデータ（画像のURLを含む）
         const questions = [
-            { question: 'NOT回路の別名は何か？', answer: '論理否定回路' },
-            { question: 'AND回路の別名は何か？', answer: '論理積回路' },
-            { question: '以下の回路は何と呼ばれますか？', answer: '論理和回路', imageUrl: 'Minecraft 2023_04_17 20_45_31.png' },
-            { question: 'XOR回路の別名は何か？', answer: '排他的論理和回路' },
-            {question: 'NAND回路の別名は何か？',answer: '否定論理積回路'}
+            { question: '異なる意見や利害の対立を調整し、対立の解消を目指すはたらき。', answer: '政治' },
+            { question: '政治を行うにはその集団をまとめるための強制力（〇〇〇〇）が必要。〇〇〇〇に入る言葉は？', answer: '政治権力' },
+            { question: '政治において最も強力な強制力は？', answer: '国家権力' },
+            { question: 'マックスウェーバーの支配の三類型でその権力が古くから続き今後とも永遠に続くと思われるもの、人が支配することをなんというか', answer: '伝統的支配' },
+            {question: 'マックスウェーバーの支配の三類型で民衆を従わせる非凡な才能を持ったものが支配することをなんというか',answer: 'カリスマ的支配'},
+            {question: 'マックスウェーバーの支配の三類型で合理的手段で国民から選出された人が支配をすることをなんというか',answer: '合理的支配'},
+            {question: '16~17世紀のヨーロッパ諸国に出現した、国王中心の政治体制をさす言葉。',answer: '絶対王政'},
+            {question: '17~18世紀に市民階級が絶対王政を倒した革命',answer: '市民革命'},
+            {question: 'NAND回路の別名は何か？',answer: '否定論理積回路'},
+            {question: 'NAND回路の別名は何か？',answer: '否定論理積回路'},
         ];
 
         // 問題の順番をランダムにシャッフル
