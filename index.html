@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>論理回路クイズ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .answer {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .question img {
+            max-width: 100%; /* 画像が親要素を超えないようにする */
+            height: auto; /* アスペクト比を維持 */
+            margin-top: 10px; /* 画像と質問文の間に余白を設定 */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>論理回路クイズ</h1>
+
+    <div id="questionsContainer"></div>
+
+    <div id="result"></div>
+
+    <script>
+        // 質問と回答のデータ（画像のURLを含む）
+        const questions = [
+            { question: 'NOT回路の別名は何か？', answer: '論理否定回路' },
+            { question: 'AND回路の別名は何か？', answer: '論理積回路' },
+            { question: '以下の回路は何と呼ばれますか？', answer: '論理和回路', imageUrl: 'Minecraft 2023_04_17 20_45_31.png' },
+            { question: 'XOR回路の別名は何か？', answer: '排他的論理和回路' },
+            {question: 'NAND回路の別名は何か？',answer: '否定論理積回路'}
+        ];
+
+        // 問題の順番をランダムにシャッフル
+        const shuffledQuestions = shuffleArray(questions);
+
+        // HTMLに質問を表示
+        const questionsContainer = document.getElementById('questionsContainer');
+        shuffledQuestions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('question');
+            questionDiv.innerHTML = `
+                <h2>${q.question}</h2>
+                ${q.imageUrl ? `<img src="${q.imageUrl}" alt="論理回路の画像">` : ''}
+                <input type="text" id="q${index + 1}">
+                <button onclick="checkAnswer(${index + 1})">回答する</button>
+                <div id="result${index + 1}" class="answer"></div>
+            `;
+            questionsContainer.appendChild(questionDiv);
+        });
+
+        // ランダムに配列をシャッフルする関数
+        function shuffleArray(array) {
+            const shuffledArray = [...array];
+            for (let i = shuffledArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+            }
+            return shuffledArray;
+        }
+
+        // 正解の回答を定義
+        const correctAnswers = shuffledQuestions.map(q => q.answer);
+
+        // 各問題ごとに回答をチェックする関数
+        function checkAnswer(questionNumber) {
+            // ユーザーの回答を取得
+            const userAnswer = document.getElementById(`q${questionNumber}`).value.trim();
+
+            // 正解と比較して結果を表示
+            const resultDiv = document.getElementById(`result${questionNumber}`);
+            if (userAnswer === correctAnswers[questionNumber - 1]) {
+                resultDiv.innerHTML = '正解！';
+                resultDiv.style.color = 'green';
+            } else {
+                resultDiv.innerHTML = '不正解。正しい回答は ' + correctAnswers[questionNumber - 1];
+                resultDiv.style.color = 'red';
+            }
+
+            // 全体の結果を表示
+            const resultSummary = document.getElementById('result');
+            const correctCount = document.querySelectorAll('.answer[style="color: green;"]').length;
+            resultSummary.innerHTML = `正解数: ${correctCount} / ${correctAnswers.length}`;
+        }
+    </script>
+
+</body>
+</html>
