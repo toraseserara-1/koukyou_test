@@ -29,6 +29,26 @@
             height: auto; /* アスペクト比を維持 */
             margin-top: 10px; /* 画像と質問文の間に余白を設定 */
         }
+        #redirectButton {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition-duration: 0.4s;
+        }
+
+        #redirectButton:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
     </style>
 </head>
 <body>
@@ -36,6 +56,8 @@
 
     <div id="result"></div>
 
+    <div id="redirectButton" onclick="redirectToAnotherSite()">情報のサイトに行く</div>
+    
     <script>
         // 質問と回答のデータ（画像のURLを含む）
         const questions = [
@@ -114,6 +136,11 @@
             const correctCount = document.querySelectorAll('.answer[style="color: green;"]').length;
             resultSummary.innerHTML = `正解数: ${correctCount} / ${correctAnswers.length}`;
         }
+        <p>hogehoge</p>
+        function redirectToAnotherSite() {
+            window.location.href = 'https://toraseserara-1.github.io/koukyou_test/';
+        }
+        <p>hogehoge</p>
     </script>
     <p>問題は公共のプリントNo13~23から出しています。</p>
     <p>更新するともう一回できます。問題はランダムな順番になっています。</p>
