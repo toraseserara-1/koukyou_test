@@ -25,16 +25,34 @@
         }
 
         .question img {
-            max-width: 100%; /* 画像が親要素を超えないようにする */
-            height: auto; /* アスペクト比を維持 */
-            margin-top: 10px; /* 画像と質問文の間に余白を設定 */
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
         }
+
+        .quiz-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+
+        .quiz-button:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
+
         #redirectButton {
             margin-top: 20px;
-            padding: 10px;
+            padding: 12px 20px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #4CAF50;
+            background-color: #3498db;
             color: white;
             border: none;
             border-radius: 5px;
@@ -46,67 +64,229 @@
 
         #redirectButton:hover {
             background-color: white;
-            color: black;
-            border: 2px solid #4CAF50;
+            color: #3498db;
+            border: 2px solid #3498db;
         }
     </style>
 </head>
 <body>
+
+    <h1>論理回路クイズ</h1>
+
     <div id="questionsContainer"></div>
 
     <div id="result"></div>
 
     <div id="redirectButton" onclick="redirectToAnotherSite()">情報のサイトに行く</div>
-    
+
     <script>
         // 質問と回答のデータ（画像のURLを含む）
         const questions = [
-            { question: '異なる意見や利害の対立を調整し、対立の解消を目指すはたらき。', answer: '政治' },
-            { question: '政治を行うにはその集団をまとめるための強制力（〇〇〇〇）が必要。〇〇〇〇に入る言葉は？', answer: '政治権力' },
-            { question: '政治において最も強力な強制力は？', answer: '国家権力' },
-            { question: 'マックスウェーバーの支配の三類型でその権力が古くから続き今後とも永遠に続くと思われるもの、人が支配することをなんというか', answer: '伝統的支配' },
-            {question: 'マックスウェーバーの支配の三類型で民衆を従わせる非凡な才能を持ったものが支配することをなんというか',answer: 'カリスマ的支配'},
-            {question: 'マックスウェーバーの支配の三類型で合理的手段で国民から選出された人が支配をすることをなんというか',answer: '合理的支配'},
-            {question: '16~17世紀のヨーロッパ諸国に出現した、国王中心の政治体制をさす言葉。',answer: '絶対王政'},
-            {question: '17~18世紀に市民階級が絶対王政を倒した革命',answer: '市民革命'},
-            {question: '国王の権力は神から与えられたものでそれを奪うことはできないという政治思想',answer: '王権神授説'},
-            {question: 'NAND回路の別名は何か？',answer: '否定論理積回路'},
-            {question: '人が社会を組織する前の状態。自然権などのものが存在する。',answer: '自然状態'},
-            {question: '人が生まれながらに持つ権利',answer: '自然権'},
-            {question: '社会や政府、国家などは人々の契約によって作られるという考え',answer: '社会契約説'},
-            {question: '自然権を国家にすべて譲り渡すという考えを持ち、「自然状態は万人の万人に対する闘争」（＝弱肉強食の状態）であると説いた人物は誰か',answer: 'ホッブス'},
-            {question: '自然権の一部を国家に信託。そして関節民主制を主張した人物はだれか',answer: 'ロック'},
-            {question: '人民全体の同意により法律が制定され、政治が行われるべき。つまり直接民主制を説いた人物はだれか',answer: 'ルソー'},
-            {question: '人民により信託された政府による権力の不当な行使に対して人民が抵抗する権利はなにか',answer: '抵抗権'},
-            {question: '人民により信託された政府による権力の不当な行使に対して人民が最終的権利としてこの政府を打倒することができる権利はなにか',answer: '革命権'},
-            {question: '人民全体の同意。これを何意志というか　',answer: '一般意志'},
-            { question: '以下の図が表すロックが唱えた政治理論はなにか？', answer: '二権分立論', imageUrl: '二権分立論.png' },
-            { question: '以下の図が表すモンテスキューが唱えた政治理論はなにか？', answer: '三権分立論', imageUrl: '三権分立論.png' },
-            { question: '国家権力を正義の法により拘束するという考え。', answer: '法の支配'},
-            { question: '人間が人間らしく生きるために生来持っている権利。', answer: '人権'},
-            { question: '国家が個人を抑制する体制。国家の利益が優先され、国民の人権が奪われる。そこでは国家を分裂させる恐れのある考え方や仕組みが否定される。（カタカナで）', answer: 'ファシズム'},
-            { question: '国家が個人を抑制する体制。国家の利益が優先され、国民の人権が奪われる。そこでは国家を分裂させる恐れのある考え方や仕組みが否定される。（漢字で）', answer: '独裁的全体主義'},
-            { question: '憲法によって国が持つ権力を制限して、国民の権利や自由を守る思想。', answer: '立憲主義'},
-            { question: '国の政治は、〇〇の枠内で行われなければならず、国家権力を〇〇によって縛る。〇〇に当てはまることばは？', answer: '憲法'},
-            { question: '裁判所が法令や処分等が憲法に違反していないかを審査する権限', answer: '違憲立法審査権'},
-            { question: '選挙で選ばれた代表者が政治を行う仕組み。（漢字五字）', answer: '間接民主制'},
-            { question: '選挙で選ばれた代表者が政治を行う仕組み。（漢字七字）', answer: '議会制民主主義'},
-            { question: '問題を単純化することによって理想的な思考だけではなく感情によって人々の支持を得ようとする政治手段', answer: 'ポピュリズム'},
-            { question: '社会的な不満を移民や外国人へと向ける排外主義的な風潮や、特定の人種や宗教を信じる集団などに対し差別や憎悪をあおる言動', answer: 'ヘイトスピーチ'},
-            { question: '君主により制定された憲法のこと', answer: '欽定憲法'},
-            { question: '議会を通さずに行使できる天皇の権限。（緊急勅令、戒厳令、宣戦、統帥権など）', answer: '天皇大権'},
-            { question: '日本の戦争終結条件を示したもの', answer: 'ポツダム宣言'},
-            { question: '１９４５年８月１５日に天皇自らラジオで国民に終戦を伝えた放送のこと', answer: '玉音放送'},
-            { question: '日本の占領方針の一つ。日本が再び戦争をできないようにすること', answer: '非軍事化'},
-            { question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', answer: '民主化'},
-            { question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', answer: '民主化'},
-            { question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', answer: '民主化'},
-            { question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', answer: '民主化'},
-            { question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', answer: '民主化'},
-            { question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', answer: '民主化'},
-            { question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', answer: '民主化'},
-            
-        ];
+            {
+                 question: '異なる意見や利害の対立を調整し、対立の解消を目指すはたらき。', 
+                 answer: ['政治']
+                 },
+            { 
+                question: '政治を行うにはその集団をまとめるための強制力（〇〇〇〇）が必要。〇に入る言葉は？', 
+                answer: ['政治権力']
+             },
+            { 
+                question: '政治において最も強力な強制力は？', 
+                answer: ['国家権力']
+             },
+            { 
+                question: 'マックスウェーバーの支配の三類型でその権力が古くから続き今後とも永遠に続くと思われるもの、人が支配することをなんというか', 
+                answer: ['伝統的支配']
+            },
+            {
+                question: 'マックスウェーバーの支配の三類型で民衆を従わせる非凡な才能を持ったものが支配することをなんというか',
+                answer: ['カリスマ的支配']
+            },
+            {
+                question: 'マックスウェーバーの支配の三類型で合理的手段で国民から選出された人が支配をすることをなんというか',
+                answer: ['合理的支配']
+            },
+            {
+                question: '16~17世紀のヨーロッパ諸国に出現した、国王中心の政治体制をさす言葉。',
+                answer: ['絶対王政']
+            },
+            {
+                question: '17~18世紀に市民階級が絶対王政を倒した革命',
+                answer: ['市民革命']
+            },
+            {
+                question: '国王の権力は神から与えられたものでそれを奪うことはできないという政治思想',
+                answer: ['王権神授説']
+            },
+            {
+                question: 'NAND回路の別名は何か？',
+                answer: ['否定論理積回路']
+            },
+            {
+                question: '人が社会を組織する前の状態。自然権などのものが存在する。',
+                answer: ['自然状態']
+            },
+            {
+                question: '人が生まれながらに持つ権利',
+                answer: ['自然権']
+            },
+            {
+                question: '社会や政府、国家などは人々の契約によって作られるという考え',
+                answer: ['社会契約説']
+            },
+            {
+                question: '自然権を国家にすべて譲り渡すという考えを持ち、「自然状態は万人の万人に対する闘争」（＝弱肉強食の状態）であると説いた人物は誰か',
+                answer: ['ホッブス']
+            },
+            {
+                question: '自然権の一部を国家に信託。そして関節民主制を主張した人物はだれか',
+                answer: ['ロック']
+            },
+            {
+                question: '人民全体の同意により法律が制定され、政治が行われるべき。つまり直接民主制を説いた人物はだれか',
+                answer: ['ルソー']
+            },
+            {
+                question: '人民により信託された政府による権力の不当な行使に対して人民が抵抗する権利はなにか',
+                answer: ['抵抗権']
+            },
+            {
+                question: '人民により信託された政府による権力の不当な行使に対して人民が最終的権利としてこの政府を打倒することができる権利はなにか',
+                answer: ['革命権']
+            },
+            {
+                question: '人民全体の同意。これを何意志というか',
+                answer: ['一般意志']
+            },
+            { 
+                question: '以下の図が表すロックが唱えた政治理論はなにか？', 
+                answer: ['二権分立論'], 
+                imageUrl: '二権分立論.png' 
+            },
+            { 
+                question: '以下の図が表すモンテスキューが唱えた政治理論はなにか？', 
+                answer: ['三権分立論'], 
+                imageUrl: '三権分立論.png' 
+            },
+            { 
+                question: '国家権力を正義の法により拘束するという考え。', 
+                answer: ['法の支配']
+            },
+            { 
+                question: '人間が人間らしく生きるために生来持っている権利。', 
+                answer: ['人権']
+            },
+            { 
+                question: '国家が個人を抑制する体制。国家の利益が優先され、国民の人権が奪われる。そこでは国家を分裂させる恐れのある考え方や仕組みが否定される。（カタカナで）', 
+                answer: ['ファシズム']
+            },
+            { 
+                question: '国家が個人を抑制する体制。国家の利益が優先され、国民の人権が奪われる。そこでは国家を分裂させる恐れのある考え方や仕組みが否定される。（漢字で）', 
+                answer: ['独裁的全体主義']
+            },
+            { 
+                question: '憲法によって国が持つ権力を制限して、国民の権利や自由を守る思想。', 
+                answer: ['立憲主義']
+            },
+            { 
+                question: '国の政治は、〇〇の枠内で行われなければならず、国家権力を〇〇によって縛る。〇に当てはまることばは？', 
+                answer: ['憲法']
+            },
+            { 
+                question: '裁判所が法令や処分等が憲法に違反していないかを審査する権限', 
+                answer: ['違憲立法審査権']
+            },
+            { 
+                question: '選挙で選ばれた代表者が政治を行う仕組み。（漢字五字）', 
+                answer: ['間接民主制']
+            },
+            { 
+                question: '選挙で選ばれた代表者が政治を行う仕組み。（漢字七字）', 
+                answer: ['議会制民主主義']
+            },
+            { 
+                question: '問題を単純化することによって理想的な思考だけではなく感情によって人々の支持を得ようとする政治手段', 
+                answer: ['ポピュリズム']
+            },
+            { 
+                question: '社会的な不満を移民や外国人へと向ける排外主義的な風潮や、特定の人種や宗教を信じる集団などに対し差別や憎悪をあおる言動', 
+                answer: ['ヘイトスピーチ']
+            },
+            { 
+                question: '君主により制定された憲法のこと', 
+                answer: ['欽定憲法']
+            },
+            { 
+                question: '議会を通さずに行使できる天皇の権限。（緊急勅令、戒厳令、宣戦、統帥権など）', 
+                answer: ['天皇大権']
+            },
+            { 
+                question: '日本の戦争終結条件を示したもの', 
+                answer: ['ポツダム宣言']
+            },
+            { 
+                question: '１９４５年８月１５日に天皇自らラジオで国民に終戦を伝えた放送のこと', 
+                answer: ['玉音放送']
+            },
+            { 
+                question: '日本の占領方針の一つ。日本が再び戦争をできないようにすること', 
+                answer: ['非軍事化']
+            },
+            { 
+                question: '日本の占領方針の一つ。日本が戦争に突き進むことになった原因を取り除く', 
+                answer: ['民主化']
+            },
+            {
+                question: 'GHQの最高司令官', 
+                answer: 'マッカーサー'},
+            { 
+                question: 'GHQの日本語名（１３文字で）', 
+                answer: ['連合国軍最高司令官総司令部']
+            },
+            { 
+                question: '日本占領政策の最高決議機関は？', 
+                answer: ['極東委員会']
+            },
+            { 
+                question: 'マッカーサーが日本政府に憲法改正をし、日本政府は〇〇案を作成。〇に入る言葉は？回答は「△△案」と記述してくだちぃ', 
+                answer: ['松本案']
+            },
+            { 
+                question: '松本案が前の憲法と基本的性格が同じだったためマッカーサーは〇〇〇〇〇〇に作成を指示。〇に当てはまる言葉は？', 
+                answer: ['GHQ民政局']
+            },
+            { 
+                question: 'GHQ民生局がマッカーサー三原則などに元図いて作成した憲法草案をなんというか？', 
+                answer: ['マッカーサー草案']
+            },
+            { 
+                question: 'GHQが作ったマッカーサー草案の別名は？', 
+                answer: ['GHQ案']
+            },
+            { 
+                question: '日本政府はマッカーサー案を受け入れて〇〇〇〇案を制作。〇に入る言葉は？回答は「△△案」と記述してくだちぃ', 
+                answer: ['日本政府案']
+            },
+            { 
+                question: '日本国憲法の交付はいつか。xxxx年yy月zz日と記入すること。また数字は半角であること', 
+                answer: ['1946年11月3日']
+            },
+            { 
+                question: 'この三原則はなにか。天皇を元首とする、戦争の放棄、封建制度の廃止', 
+                answer: ['マッカーサー三原則']
+            },
+            { 
+                question: 'マッカーサー三原則のうち天皇を元首とする、戦争の放棄、あと一つは何か', 
+                answer: ['封建制度の廃止']
+            },
+            { 
+                question: 'マッカーサー三原則のうち天皇を元首とする、封建制度の廃止、あと一つは何か', 
+                answer: ['戦争の放棄']
+            },
+            { 
+                question: 'マッカーサー三原則のうち戦争の放棄、封建制度の廃止、あと一つは何か', 
+                answer: ['天皇を元首とする']},
+            ];
 
         // 問題の順番をランダムにシャッフル
         const shuffledQuestions = shuffleArray(questions);
@@ -120,7 +300,7 @@
                 <h2>${q.question}</h2>
                 ${q.imageUrl ? `<img src="${q.imageUrl}" alt="論理回路の画像">` : ''}
                 <input type="text" id="q${index + 1}">
-                <button onclick="checkAnswer(${index + 1})">回答する</button>
+                <button class="quiz-button" onclick="checkAnswer(${index + 1})">回答する</button>
                 <div id="result${index + 1}" class="answer"></div>
             `;
             questionsContainer.appendChild(questionDiv);
@@ -137,20 +317,20 @@
         }
 
         // 正解の回答を定義
-        const correctAnswers = shuffledQuestions.map(q => q.answer);
+        const correctAnswers = shuffledQuestions.map(q => q.answers);
 
         // 各問題ごとに回答をチェックする関数
         function checkAnswer(questionNumber) {
             // ユーザーの回答を取得
-            const userAnswer = document.getElementById(`q${questionNumber}`).value.trim();
+            const userAnswer = document.getElementById(`q${questionNumber}`).value.trim().toUpperCase();
 
             // 正解と比較して結果を表示
             const resultDiv = document.getElementById(`result${questionNumber}`);
-            if (userAnswer === correctAnswers[questionNumber - 1]) {
+            if (correctAnswers[questionNumber - 1].includes(userAnswer)) {
                 resultDiv.innerHTML = '正解！';
                 resultDiv.style.color = 'green';
             } else {
-                resultDiv.innerHTML = '不正解。正しい回答は ' + correctAnswers[questionNumber - 1];
+                resultDiv.innerHTML = '不正解。正しい回答は ' + correctAnswers[questionNumber - 1].join(' または ');
                 resultDiv.style.color = 'red';
             }
 
@@ -162,9 +342,10 @@
         function redirectToAnotherSite() {
             window.location.href = 'https://toraseserara-1.github.io/gakko-test/';
         }
-        </script>
+    </script>
     
-        <p>問題は公共のプリントNo13~23から出しています。</p>
-        <p>更新するともう一回できます。問題はランダムな順番になっています。</p>
+    <p>問題は公共のプリントNo13~23から出しています。</p>
+    <p>問題の順番はランダムな順番になっています。更新すると問題の順番が変わりもう一回できます。</p>
+
 </body>
 </html>
